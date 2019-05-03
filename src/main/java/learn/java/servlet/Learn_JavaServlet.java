@@ -1,6 +1,8 @@
 package learn.java.servlet;
 
+import java.awt.List;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +24,38 @@ public class Learn_JavaServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获取环境变量
-		Map<String, String> envMap = new HashMap<String, String>();
-		envMap = System.getenv();
-		//获取服务名称（组件需要自定义服务名称）,输出本服务名称
+//		Map<String, String> envMap = new HashMap<String, String>();
+//		envMap = System.getenv();
+		
+		Map<String, String> envMap = System.getenv();
+		ArrayList<String> nextServer = new ArrayList<String>();
+		
+		
+		//获取本机服务名称
 		String hostName = envMap.get("HOSTNAME").split("-")[0];
-		String localResp = "=>" + hostName;
-		response.getWriter().write(localResp);
+		String respString = "=>" + hostName;;
+		
+		//获取连线组件信息(连线的环境变量必须满足NEXTSERVER+数字样式)
+		for(String key : envMap.keySet()) {
+			if(key.contains("NEXTSERVER")) {
+				nextServer.add(key);
+			}
+		}
+		
+		//如果环境变量中不存在其他连线组件，则返回服务名称结果
+		if(nextServer.isEmpty()) {
+			response.getWriter().write(respString);
+		}else {
+			for(String next:nextServer) {
+				String nextHost = envMap.get(next + "_SERVICE_HOST");
+				String nextPort = envMap.get(next + "_SERVICE_PORT");
+				String nextUrl = "http://" + nextHost + ":" + nextPort;
+				String nexResp = sendGet(nextUrl);
+				respString = respString + nexResp;
+			}
+			response.getWriter().write(respString);
+		}
+		
 		
 	}
 	
