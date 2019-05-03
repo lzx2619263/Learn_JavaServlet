@@ -20,7 +20,7 @@ public class Learn_JavaServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String newUrl = System.getProperty("sysenv.NEWURL");
+		String newUrl = System.getenv().get("NEWURL");
 		String getBackString = this.sendGet(newUrl);
 		response.getWriter().write(getBackString);
 
