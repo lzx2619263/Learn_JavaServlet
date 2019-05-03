@@ -1,7 +1,8 @@
 package learn.java.servlet;
 
 import java.io.IOException;
-
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,14 +21,17 @@ public class Learn_JavaServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String newUrl = System.getenv().get("NEWURL");
-		String getBackString = this.sendGet(newUrl);
-		response.getWriter().write(getBackString);
-
+		//获取环境变量
+		Map<String, String> envMap = new HashMap<String, String>();
+		envMap = System.getenv();
+		//获取服务名称（组件需要自定义服务名称）,输出本服务名称
+		String hostName = envMap.get("HOSTNAME").split("-")[0];
+		String localResp = "=>" + hostName;
+		response.getWriter().write(localResp);
 		
 	}
 	
-	//使用httpclient发送get请求
+	//使用httpclient发送get请求到指定url
 	protected String sendGet(String url) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet request = new HttpGet(url);
