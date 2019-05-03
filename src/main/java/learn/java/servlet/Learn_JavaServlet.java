@@ -54,9 +54,9 @@ public class Learn_JavaServlet extends HttpServlet {
 				respString = respString + nextUrl;
 				
 				String nexResp = sendGet(nextUrl);
-				respString = respString + nexResp;
+				respString = next + "_SERVICE_HOST" + "|" + next + "_SERVICE_PORT";
 			}
-			response.getWriter().write(respString);
+//			response.getWriter().write(respString);
 		}
 		
 		
