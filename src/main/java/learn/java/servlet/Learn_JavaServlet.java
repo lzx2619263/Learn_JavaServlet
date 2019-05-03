@@ -38,7 +38,7 @@ public class Learn_JavaServlet extends HttpServlet {
 		//获取连线组件信息(连线的环境变量必须满足NEXTSERVER+数字样式)
 		for(String key : envMap.keySet()) {
 			if(key.contains("NEXTSERVER")) {
-				nextServer.add(key);
+				nextServer.add(key.toUpperCase());
 			}
 		}
 		
@@ -50,6 +50,9 @@ public class Learn_JavaServlet extends HttpServlet {
 				String nextHost = envMap.get(next + "_SERVICE_HOST");
 				String nextPort = envMap.get(next + "_SERVICE_PORT");
 				String nextUrl = "http://" + nextHost + ":" + nextPort;
+				
+				respString = respString + nextUrl;
+				
 				String nexResp = sendGet(nextUrl);
 				respString = respString + nexResp;
 			}
