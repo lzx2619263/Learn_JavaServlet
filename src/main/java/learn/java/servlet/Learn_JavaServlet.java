@@ -33,7 +33,7 @@ public class Learn_JavaServlet extends HttpServlet {
 		
 		//获取本机服务名称
 		String hostName = envMap.get("HOSTNAME").split("-")[0];
-		String respString = "=>" + hostName;;
+		String respString = "==>" + hostName;;
 		
 		//获取连线组件信息(连线的环境变量必须满足NEXTSERVER+数字样式)
 		for(String key : envMap.keySet()) {
