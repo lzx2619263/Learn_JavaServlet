@@ -50,10 +50,7 @@ public class Learn_JavaServlet extends HttpServlet {
 				String nextHost = envMap.get(next + "_SERVICE_HOST");
 				String nextPort = envMap.get(next + "_SERVICE_PORT");
 				String nextUrl = "http://" + nextHost + ":" + nextPort;
-//				respString = respString + nextUrl;
-				
-//				respString = next + "_SERVICE_HOST" + "|" + next + "_SERVICE_PORT";
-				String nexResp = sendGet(nextUrl);
+				String nexResp = sendGet(nextUrl, next.toLowerCase());
 				respString = respString + nexResp;
 			}
 			response.getWriter().write(respString);
@@ -63,7 +60,7 @@ public class Learn_JavaServlet extends HttpServlet {
 	}
 	
 	//使用httpclient发送get请求到指定url
-	protected String sendGet(String url) {
+	protected String sendGet(String url, String serverName) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpGet request = new HttpGet(url);
 		CloseableHttpResponse response = null;
@@ -78,8 +75,10 @@ public class Learn_JavaServlet extends HttpServlet {
 			httpClient.close();
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
+			resultString = serverName + " Exception";
 		} catch (IOException e) {
 			e.printStackTrace();
+			resultString = serverName + " Exception";
 		}
 		return resultString;
 	}
