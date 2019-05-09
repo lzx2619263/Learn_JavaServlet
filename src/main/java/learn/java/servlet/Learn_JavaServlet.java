@@ -35,9 +35,9 @@ public class Learn_JavaServlet extends HttpServlet {
 		String hostName = envMap.get("HOSTNAME").split("-")[0];
 		String respString = "==>" + hostName;;
 		
-		//获取HTTP连线组件信息(连线的环境变量必须满足NEXTSERVER+数字样式)
+		//获取HTTP连线组件信息(连线的环境变量必须满足HTTPSERVER+数字样式)
 		for(String key : envMap.keySet()) {
-			if(key.contains("NEXTSERVER")) {
+			if(key.contains("HTTPSERVER")) {
 				nextHttpServer.add(envMap.get(key).toUpperCase());
 			}
 		}
@@ -49,21 +49,8 @@ public class Learn_JavaServlet extends HttpServlet {
 			}
 		}
 		
-		//如果环境变量中不存在其他HTTP或TCP连线组件，则返回服务名称结果
-//		if(nextHttpServer.isEmpty() && nextTcpServer.isEmpty()) {
-//			response.getWriter().write(respString);
-//		}else {
-//			for(String next:nextHttpServer) {
-//				String nextHost = envMap.get(next + "_SERVICE_HOST");
-//				String nextPort = envMap.get(next + "_SERVICE_PORT");
-//				String nextUrl = "http://" + nextHost + ":" + nextPort;
-//				String nexResp = sendGet(nextUrl, next.toLowerCase());
-//				respString = respString + nexResp;
-//			}
-//			response.getWriter().write(respString);
-//		}
-		
-		if(nextHttpServer.size() > 0) {
+		//如果有连接的HTTP服务则发送get请求
+		if(!nextHttpServer.isEmpty()) {
 			for(String nextHttp:nextHttpServer) {
 				String nextHttpHost = envMap.get(nextHttp + "_SERVICE_HOST");
 				String nextHttpPort = envMap.get(nextHttp + "_SERVICE_PORT");
@@ -73,20 +60,19 @@ public class Learn_JavaServlet extends HttpServlet {
 			}
 		}
 		
-		if (nextTcpServer.size() > 0) {
+		//如果有连接的TCP服务则发送TCP请求
+		if (!nextTcpServer.isEmpty()) {
 			for(String nextTcp:nextTcpServer) {
 				String nextTcpHost = envMap.get(nextTcp + "_SERVICE_HOST");
 				int nextTcpPort = Integer.valueOf(envMap.get(nextTcp + "_SERVICE_PORT"));
-//				String nextTcpUrl = "http://" + nextTcpHost + ":" + nextTcpPort;
 				String nextTcpResp = TcpRequest(nextTcpHost, nextTcpPort, nextTcp.toLowerCase());
 				respString = respString + nextTcpResp;
 			}
 		}
 		
 	    response.getWriter().write(respString);
-		
-		
 	}
+	
 	
 	//使用httpclient发送get请求到指定url
 	protected String httpGetRequest(String url, String serverName) {
