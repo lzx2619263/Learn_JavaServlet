@@ -63,7 +63,7 @@ public class Learn_JavaServlet extends HttpServlet {
 //			response.getWriter().write(respString);
 //		}
 		
-		if(!nextHttpServer.isEmpty()) {
+		if(nextHttpServer.size() > 0) {
 			for(String nextHttp:nextHttpServer) {
 				String nextHttpHost = envMap.get(nextHttp + "_SERVICE_HOST");
 				String nextHttpPort = envMap.get(nextHttp + "_SERVICE_PORT");
@@ -71,7 +71,9 @@ public class Learn_JavaServlet extends HttpServlet {
 				String nextHttpResp = httpGetRequest(nextHttpUrl, nextHttp.toLowerCase());
 				respString = respString + nextHttpResp;
 			}
-		}else if (!nextTcpServer.isEmpty()) {
+		}
+		
+		if (nextTcpServer.size() > 0) {
 			for(String nextTcp:nextTcpServer) {
 				String nextTcpHost = envMap.get(nextTcp + "_SERVICE_HOST");
 				int nextTcpPort = Integer.valueOf(envMap.get(nextTcp + "_SERVICE_PORT"));
@@ -79,9 +81,9 @@ public class Learn_JavaServlet extends HttpServlet {
 				String nextTcpResp = TcpRequest(nextTcpHost, nextTcpPort, nextTcp.toLowerCase());
 				respString = respString + nextTcpResp;
 			}
-		}else {
-			response.getWriter().write(respString);
 		}
+		
+	    response.getWriter().write(respString);
 		
 		
 	}
