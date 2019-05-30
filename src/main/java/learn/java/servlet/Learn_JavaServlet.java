@@ -3,6 +3,7 @@ package learn.java.servlet;
 import java.awt.List;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 public class Learn_JavaServlet extends HttpServlet {
-
+	
+	public static final String HTTPPORT = "8080";
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获取环境变量
@@ -32,8 +35,9 @@ public class Learn_JavaServlet extends HttpServlet {
 		ArrayList<String> nextTcpServer = new ArrayList<String>();
 		
 		//获取本机服务名称
-		String hostName = envMap.get("HOSTNAME").split("-")[0];
-		String respString = "==>" + hostName;;
+//		String hostName = envMap.get("HOSTNAME").split("-")[0];
+		String hostName = envMap.get("HOSTNAME");
+		String respString = "==>" + hostName;
 		
 		//获取HTTP连线组件信息(连线的环境变量必须满足HTTPSERVER+数字样式)
 		for(String key : envMap.keySet()) {
@@ -51,10 +55,16 @@ public class Learn_JavaServlet extends HttpServlet {
 		
 		//如果有连接的HTTP服务则发送get请求
 		if(!nextHttpServer.isEmpty()) {
-			for(String nextHttp:nextHttpServer) {
-				String nextHttpHost = envMap.get(nextHttp + "_SERVICE_HOST");
-				String nextHttpPort = envMap.get(nextHttp + "_SERVICE_PORT");
+			for(String nextHttp : nextHttpServer) {
+//				String nextHttpHost = envMap.get(nextHttp + "_SERVICE_HOST");
+//				String nextHttpPort = envMap.get(nextHttp + "_SERVICE_PORT");
+				//如果组件同集群则从环境变量中取IP和端口，如果跨集群则使用service名称和默认8080端口
+				String nextHttpHost = (null == envMap.get(nextHttp + "_SERVICE_HOST")?nextHttp.toLowerCase():envMap.get(nextHttp + "_SERVICE_HOST"));
+				System.out.println(nextHttpHost);
+				String nextHttpPort = (null == envMap.get(nextHttp + "_SERVICE_PORT")?HTTPPORT:envMap.get(nextHttp + "_SERVICE_PORT"));
+				System.out.println(nextHttpPort);
 				String nextHttpUrl = "http://" + nextHttpHost + ":" + nextHttpPort;
+				System.out.println(nextHttpUrl);
 				String nextHttpResp = httpGetRequest(nextHttpUrl, nextHttp.toLowerCase());
 				respString = respString + nextHttpResp;
 			}
@@ -71,6 +81,7 @@ public class Learn_JavaServlet extends HttpServlet {
 		}
 		
 	    response.getWriter().write(respString);
+	    
 	}
 	
 	
