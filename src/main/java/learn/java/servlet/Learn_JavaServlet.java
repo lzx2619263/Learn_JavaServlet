@@ -39,6 +39,8 @@ public class Learn_JavaServlet extends HttpServlet {
 		String hostName = envMap.get("HOSTNAME");
 		String respString = "==>" + hostName;
 		
+		
+		
 		//获取HTTP连线组件信息(连线的环境变量必须满足HTTPSERVER+数字样式)
 		for(String key : envMap.keySet()) {
 			if(key.contains("HTTPSERVER")) {
@@ -70,7 +72,7 @@ public class Learn_JavaServlet extends HttpServlet {
 			}
 		}
 		
-		//如果有连接的TCP服务则发送TCP请求
+		//如果有连接的TCP服务则发送TCP请求.
 		if (!nextTcpServer.isEmpty()) {
 			for(String nextTcp:nextTcpServer) {
 				String nextTcpHost = envMap.get(nextTcp + "_SERVICE_HOST");
