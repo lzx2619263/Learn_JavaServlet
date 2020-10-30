@@ -29,7 +29,7 @@ public class Learn_JavaServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//获取环境变量
+		//获取环境变量-修改测试
 		Map<String, String> envMap = System.getenv();
 		ArrayList<String> nextHttpServer = new ArrayList<String>();
 		ArrayList<String> nextTcpServer = new ArrayList<String>();
